@@ -25,6 +25,6 @@ CREATE TABLE players(
 -- matches
 CREATE TABLE matches(
     id serial,
-    winner serial REFERENCES players(id),
+    winner serial REFERENCES players(id) CHECK (winner != loser),
     loser serial REFERENCES players(id)
 );
