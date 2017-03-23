@@ -7,3 +7,23 @@
 -- these lines here.
 
 
+
+-- Connect to tournament db
+\c tournament
+
+-- RESET
+DROP TABLE IF EXISTS players;
+DROP TABLE IF EXISTS matches;
+
+-- players table
+CREATE TABLE players(
+    id serial PRIMARY KEY,
+    name text
+);
+
+-- matches
+CREATE TABLE matches(
+    id serial,
+    winner serial REFERENCES players(id),
+    loser serial REFERENCES players(id)
+);
