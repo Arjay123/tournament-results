@@ -52,7 +52,7 @@ def registerPlayer(name):
 
     c.execute("insert into players (name) values (%s)",(name,))
     conn.commit()
-    c.close()
+    conn.close()
 
 
 
@@ -69,7 +69,7 @@ def playerStandings():
         wins: the number of matches the player has won
         matches: the number of matches the player has played
     """
-
+    
 
 def reportMatch(winner, loser):
     """Records the outcome of a single match between two players.
@@ -77,9 +77,18 @@ def reportMatch(winner, loser):
     Args:
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
+
+    Throws:
+        psycopg2.IntegrityError - if winner and loser are same player, or id
+        does not match any registered player
     """
+    conn = connect()
+    c = conn.cursor()
+    c.execute("insert into matches (winner, loser) values (%s, %s)",(winner, loser,))
+    conn.commit()
+    conn.close()
  
- 
+
 def swissPairings():
     """Returns a list of pairs of players for the next round of a match.
   
