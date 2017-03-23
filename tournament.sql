@@ -40,7 +40,7 @@ CREATE VIEW matches_played as
 
 
 CREATE VIEW matches_won as
-    SELECT players.id as player_id, count(*) as won
+    SELECT players.id as player_id, count(matches.id) as won
     FROM players
     LEFT JOIN matches
     ON players.id = winner
@@ -50,4 +50,5 @@ CREATE VIEW matches_won as
 CREATE VIEW standings as 
     SELECT players.id, players.name, won, matches_played.matches
     FROM players, matches_won, matches_played
-    WHERE players.id = matches_won.player_id AND players.id = matches_played.player_id;
+    WHERE players.id = matches_won.player_id AND players.id = matches_played.player_id
+    ORDER BY won;

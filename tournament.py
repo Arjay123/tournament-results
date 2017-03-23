@@ -49,7 +49,6 @@ def registerPlayer(name):
     """
     conn = connect()
     c = conn.cursor()
-
     c.execute("insert into players (name) values (%s)",(name,))
     conn.commit()
     conn.close()
@@ -69,7 +68,16 @@ def playerStandings():
         wins: the number of matches the player has won
         matches: the number of matches the player has played
     """
-    
+    conn = connect()
+    c = conn.cursor()
+    c.execute("select * from standings;")
+
+    standings = c.fetchall()
+
+    conn.close()
+
+    return standings
+
 
 def reportMatch(winner, loser):
     """Records the outcome of a single match between two players.
@@ -87,6 +95,8 @@ def reportMatch(winner, loser):
     c.execute("insert into matches (winner, loser) values (%s, %s)",(winner, loser,))
     conn.commit()
     conn.close()
+
+
  
 
 def swissPairings():
@@ -104,5 +114,32 @@ def swissPairings():
         id2: the second player's unique id
         name2: the second player's name
     """
+    conn =  connect()
+    c = conn.cursor()
+    c.execute("select id, name from standings;")
+    standings = c.fetchall()
+    conn.close()
+
+    # This line of code is from this 
+    # stack overflow thread by the user 'Margus'
+    # http://stackoverflow.com/a/5389578
+    # 
+    # ex.
+    # list1 - standings[::2]  = [A, C, E, G]
+    # list2 - standings[1::2] = [B, D, F, H]
+    #
+    # zip(list1, list2) = [(A, B), (C, D), (E, F), (G, H)]
+    zipped_pairs = zip(standings[::2], standings[1::2])
+
+    # extract both tuples (size 2) inside each list tuple element to create
+    # a larger tuple (size 4) for each list element
+    pairings = [(x[0], x[1], y[0], y[1]) for x, y in zipped_pairs]
+    return pairings
+
+
+
+
+    
+
 
 
