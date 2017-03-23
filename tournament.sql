@@ -34,16 +34,14 @@ CREATE TABLE matches(
 CREATE VIEW matches_played as 
     SELECT players.id as player_id, count(matches.id) as matches
     FROM players 
-    LEFT JOIN matches 
-    ON players.id = winner OR players.id = loser 
+    LEFT JOIN matches ON players.id = winner OR players.id = loser 
     GROUP BY players.id;
 
 
 CREATE VIEW matches_won as
     SELECT players.id as player_id, count(matches.id) as won
     FROM players
-    LEFT JOIN matches
-    ON players.id = winner
+    LEFT JOIN matches ON players.id = winner
     GROUP BY players.id;
 
 
