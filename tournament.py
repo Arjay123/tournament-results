@@ -56,7 +56,9 @@ def registerPlayer(name):
       name: the player's full name (need not be unique).
     """
     conn, c = connect()
-    c.execute("insert into players (name) values (%s)",(name,))
+    query = "insert into players (name) values (%s)"
+    params = (name,)
+    c.execute(query, params)
     conn.commit()
     conn.close()
 
@@ -97,7 +99,9 @@ def reportMatch(winner, loser):
         does not match any registered player
     """
     conn, c = connect()
-    c.execute("insert into matches (winner, loser) values (%s, %s)",(winner, loser,))
+    query = "insert into matches (winner, loser) values (%s, %s)"
+    params = (winner, loser,)
+    c.execute(query, params)
     conn.commit()
     conn.close()
 
