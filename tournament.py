@@ -25,7 +25,7 @@ def connect(db_name="tournament"):
 def deleteMatches():
     """Remove all the match records from the database."""
     conn, c = connect()
-    c.execute("delete from matches;")
+    c.execute("TRUNCATE matches;")
     conn.commit()
     conn.close()
 
@@ -33,7 +33,7 @@ def deleteMatches():
 def deletePlayers():
     """Remove all the player records from the database."""
     conn, c = connect()
-    c.execute("delete from players;")
+    c.execute("TRUNCATE players CASCADE;")
     conn.commit()
     conn.close()
 
