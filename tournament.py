@@ -137,4 +137,3 @@ def swissPairings():
     # a larger tuple (size 4) for each list element
     pairings = [(x[0], x[1], y[0], y[1]) for x, y in zipped_pairs]
     return pairings
-
