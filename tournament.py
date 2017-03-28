@@ -6,15 +6,25 @@
 import psycopg2
 
 
-def connect():
-    """Connect to the PostgreSQL database.  Returns a database connection."""
-    return psycopg2.connect("dbname=tournament")
+def connect(db_name="tournament"):
+    """Connect to the PostgreSQL database.  Returns a database connection.
+    
+    This block of code was provided by a Udacity reviewer who recommended
+    I refactor the connect method to return both the connection and cursor,
+    as well as enclose the connection code in a try/except block.
+
+    """
+    try:
+        db = psycopg2.connect("dbname=%s" % db_name)
+        cursor = db.cursor()
+        return db, cursor
+    except:
+        print("Error connecting to database: " % db_name)
 
 
 def deleteMatches():
     """Remove all the match records from the database."""
-    conn = connect()
-    c = conn.cursor()
+    conn, c = connect()
     c.execute("delete from matches;")
     conn.commit()
     conn.close()
@@ -22,16 +32,14 @@ def deleteMatches():
 
 def deletePlayers():
     """Remove all the player records from the database."""
-    conn = connect()
-    c = conn.cursor()
+    conn, c = connect()
     c.execute("delete from players;")
     conn.commit()
     conn.close()
 
 def countPlayers():
     """Returns the number of players currently registered."""
-    conn = connect()
-    c = conn.cursor()
+    conn, c = connect()
     c.execute("select count(*) from players;")
     res = c.fetchone()
     return res[0]
@@ -47,8 +55,7 @@ def registerPlayer(name):
     Args:
       name: the player's full name (need not be unique).
     """
-    conn = connect()
-    c = conn.cursor()
+    conn, c = connect()
     c.execute("insert into players (name) values (%s)",(name,))
     conn.commit()
     conn.close()
@@ -68,8 +75,7 @@ def playerStandings():
         wins: the number of matches the player has won
         matches: the number of matches the player has played
     """
-    conn = connect()
-    c = conn.cursor()
+    conn, c = connect()
     c.execute("select * from standings;")
 
     standings = c.fetchall()
@@ -90,8 +96,7 @@ def reportMatch(winner, loser):
         psycopg2.IntegrityError - if winner and loser are same player, or id
         does not match any registered player
     """
-    conn = connect()
-    c = conn.cursor()
+    conn, c = connect()
     c.execute("insert into matches (winner, loser) values (%s, %s)",(winner, loser,))
     conn.commit()
     conn.close()
@@ -114,8 +119,7 @@ def swissPairings():
         id2: the second player's unique id
         name2: the second player's name
     """
-    conn =  connect()
-    c = conn.cursor()
+    conn, c = connect()
     c.execute("select id, name from standings;")
     standings = c.fetchall()
     conn.close()
