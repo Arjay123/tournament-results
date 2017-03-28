@@ -8,12 +8,11 @@
 
 
 
--- Connect to tournament db
+-- Reset then connect to tournament db
+DROP DATABASE IF EXISTS tournament;
+CREATE DATABASE tournament;
 \c tournament
 
--- RESET
-DROP TABLE IF EXISTS matches CASCADE;
-DROP TABLE IF EXISTS players CASCADE;
 
 -- players table
 CREATE TABLE players(
@@ -24,8 +23,8 @@ CREATE TABLE players(
 -- matches
 CREATE TABLE matches(
     id serial,
-    winner serial REFERENCES players(id) CHECK (winner != loser),
-    loser serial REFERENCES players(id)
+    winner integer REFERENCES players(id) CHECK (winner != loser),
+    loser integer REFERENCES players(id)
 );
 
 
