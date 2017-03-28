@@ -15,3 +15,9 @@ To set up the database you must create a database called "tournament", which you
 After setting up the database you can import the sql file using the command:
 >\i tournament.sql
 
+## Usage
+
+Once the sql file has been imported, you can test the module by running the command:
+
+>python tournament_test.py
+
